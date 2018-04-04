@@ -138,3 +138,36 @@ for i,v in enumerate(census[0]):
 for key in month_counts_homicide:
     month_counts_homicide[key]=month_counts_homicide[key]/int(total)*100000
 print(month_counts_homicide)
+
+# homicide counts by gender
+gender_counts={}
+for row in data:
+    if row[3]=="Homicide":
+        if row[5] in gender_counts:
+            gender_counts[row[5]]+=1
+        else:
+            gender_counts[row[5]]=1
+print(gender_counts)
+
+#intents (Accidental) by gender and race
+gender_counts_accidental={}
+for row in data:
+    if row[3]=="Accidental":
+        if row[5] in gender_counts_accidental:
+            gender_counts_accidental[row[5]]+=1
+        else:
+            gender_counts_accidental[row[5]]=1
+print(gender_counts_accidental)
+
+race_counts_accidental={}
+for row in data:
+    if row[3]=="Accidental":
+        if row[7] in race_counts_accidental:
+            race_counts_accidental[row[7]]+=1
+        else:
+            race_counts_accidental[row[7]]=1
+print(race_counts_accidental)
+#accidental rate per 100000 by race
+for key in race_counts_accidental:
+    race_counts_accidental[key]=race_counts_accidental[key]/int(mapping[key])*100000
+print(race_counts_accidental)
