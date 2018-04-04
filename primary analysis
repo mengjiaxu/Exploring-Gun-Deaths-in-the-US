@@ -1,0 +1,113 @@
+import csv
+f=open("guns.csv","r")
+data=list(csv.reader(f))
+print(data[:5])
+
+headers=data[0]
+data=data[1:]
+print(headers)
+print(data[:5])
+
+#death per year
+years=[]
+for row in data:
+    years.append(row[1])
+
+year_counts={}
+for year in years:
+    if year in year_counts:
+        year_counts[year]+=1
+    else:
+        year_counts[year]=1
+
+print(year_counts)
+
+#death per day
+import datetime
+dates=[]
+for row in data:
+    dates.append(datetime.datetime(year=int(row[1]),month=int(row[2]),day=1))
+print(dates[:5])
+
+date_counts={}
+for date in dates:
+    if date in date_counts:
+        date_counts[date]+=1
+    else:
+        date_counts[date]=1
+print(date_counts)
+
+#death per sex
+sex_counts={}
+for row in data:
+    if row[5] in sex_counts:
+        sex_counts[row[5]]+=1
+    else:
+        sex_counts[row[5]]=1
+print(sex_counts)
+
+#death per race
+race_counts={}
+for row in data:
+    if row[7] in race_counts:
+        race_counts[row[7]]+=1
+    else:
+        race_counts[row[7]]=1
+print(race_counts)
+
+#population
+f=open("census.csv","r")
+census=list(csv.reader(f))
+
+#census and race_counts have diff keys
+mapping={}
+for idx, vl in enumerate(census[0]):
+    if vl=="Race Alone - Asian":
+        asian=census[1][idx]
+    if vl=="Race Alone - Native Hawaiian and Other Pacific Islander":
+        other=census[1][idx]
+    if vl=="Race Alone - Black or African American":
+        mapping["Black"]=census[1][idx]
+    if vl=="Race Alone - American Indian and Alaska Native":
+        mapping["Native American/Native Alaskan"]=census[1][idx]
+    if vl=="Race Alone - Hispanic":
+        mapping["Hispanic"]=census[1][idx]
+    if vl=="Race Alone - White":
+        mapping["White"]=census[1][idx]
+mapping["Asian/Pacific Islander"]=asian+other
+print(mapping)
+
+#rate of gun death per 100000ppl  by race
+race_per_hundredk={}
+for key in race_counts:
+    race_per_hundredk[key]=int(race_counts[key])/int(mapping[key])*100000
+print(race_per_hundredk)
+
+#extract intent column
+intents=[]
+for row in data:
+    intents.append(row[3])
+#extract race column
+races=[]
+for row in data:
+    races.append(row[7])
+    
+homicide_race_counts={}
+for i,v in enumerate(races):
+    if intents[i]=="Homicide":
+        if v in homicide_race_counts:
+            homicide_race_counts[v]+=1
+        else:
+            homicide_race_counts[v]=1
+print(homicide_race_counts)
+
+
+#for intent of homicide:
+#rate of gun death per 100000ppl  by race
+
+homicide_race_counts_per_hundredk={}
+for k in homicide_race_counts:
+    homicide_race_counts_per_hundredk[k]=int(homicide_race_counts[k])/int(mapping[k])*100000
+print(homicide_race_counts_per_hundredk)
+
+print(census)
