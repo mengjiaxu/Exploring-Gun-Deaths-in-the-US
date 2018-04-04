@@ -58,6 +58,7 @@ print(race_counts)
 #population
 f=open("census.csv","r")
 census=list(csv.reader(f))
+print(census)
 
 #census and race_counts have diff keys
 mapping={}
@@ -110,4 +111,30 @@ for k in homicide_race_counts:
     homicide_race_counts_per_hundredk[k]=int(homicide_race_counts[k])/int(mapping[k])*100000
 print(homicide_race_counts_per_hundredk)
 
-print(census)
+#month and homicide rate
+#extract month column
+months=[]
+for row in data:
+    months.append(row[2])
+#extract intent column
+intents=[]
+for row in data:
+    intents.append(row[3])
+
+month_counts_homicide={}
+for i,v in enumerate(intents):
+    if v=="Homicide":
+        if months[i] in month_counts_homicide:
+            month_counts_homicide[months[i]]+=1
+        else:
+            month_counts_homicide[months[i]]=1
+print(month_counts_homicide)
+#extract total population
+for i,v in enumerate(census[0]):
+    if v=="Total":
+        total=census[1][i]
+
+#calculate homicide rate per 100000 by month
+for key in month_counts_homicide:
+    month_counts_homicide[key]=month_counts_homicide[key]/int(total)*100000
+print(month_counts_homicide)
